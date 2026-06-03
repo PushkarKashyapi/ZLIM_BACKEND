@@ -22,6 +22,11 @@ app.get("/", (req, res) => {
 
 app.use("/api", workspaceRoutes)
 
+console.log(
+  "workspaceRoutes =",
+  workspaceRoutes
+)
+
 const PORT =
   process.env.PORT || 5000
 
