@@ -9,4 +9,8 @@ router.get("/", (req, res) => {
   res.send("API WORKING")
 })
 
+router.get("/test", (req, res) => {
+  res.send("TEST ROUTER WORKING")
+})
+
 module.exports = router
