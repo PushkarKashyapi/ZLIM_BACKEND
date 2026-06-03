@@ -1,8 +1,8 @@
 const express = require("express")
-const controllers =
+const createWorkspace =
   require("../controller")
 
-console.log(controllers)
+console.log(createWorkspace)
 const router = express.Router()
 
 router.get("/", (req, res) => {
