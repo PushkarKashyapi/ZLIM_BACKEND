@@ -1,6 +1,5 @@
 const express = require("express")
-app.use(cors())
-app.use(express.json())
+
 const {
   createWorkspace,
   getWorkspaces,
