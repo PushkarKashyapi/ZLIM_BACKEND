@@ -2,19 +2,8 @@ const express = require("express")
 
 const router = express.Router()
 
-router.post(
-  "/",
-  createWorkspace
-)
-
-router.get(
-  "/",
-  getWorkspaces
-)
-
-router.delete(
-  "/:id",
-  deleteWorkspace
-)
+router.get("/", (req, res) => {
+  res.send("API WORKING")
+})
 
 module.exports = router
