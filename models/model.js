@@ -1,28 +1,36 @@
-require("dotenv").config() 
+const mongoose = require("mongoose")
 
-const express = require("express")
-const cors = require("cors")
+const workspaceSchema =
+  new mongoose.Schema(
+    {
+      name: {
+        type: String,
+        required: true
+      },
 
-const connectDB =
-  require("../mongo")
+      trigger: {
+        type: String,
+        required: true
+      },
 
-connectDB()
-console.log("mongoconnected");
+      autoLaunch: {
+        type: Boolean,
+        default: true
+      },
 
-const app = express()
-
-app.use(cors())
-app.use(express.json())
-
-app.get("/", (req, res) => {
-  res.send("Zlim Backend Running 🚀")
-})
-
-const PORT =
-  process.env.PORT || 5000
-
-app.listen(PORT, () => {
-  console.log(
-    `Server running on port ${PORT}`
+      tabs: [
+        {
+          type: String
+        }
+      ]
+    },
+    {
+      timestamps: true
+    }
   )
-})
+
+module.exports =
+  mongoose.model(
+    "Workspace",
+    workspaceSchema
+  )
