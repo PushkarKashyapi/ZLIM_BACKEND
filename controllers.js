@@ -3,6 +3,9 @@ require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
 
+const workspaceRoutes =
+  require("./routes/routers")
+
 const connectDB =
   require("./mongo")
 
@@ -101,12 +104,15 @@ const deleteWorkspace = async (
   }
 }
 
+
+
 module.exports = {
   createWorkspace,
   getWorkspaces,
   deleteWorkspace
 }
 
+app.use("/api", workspaceRoutes)
 
 
 
