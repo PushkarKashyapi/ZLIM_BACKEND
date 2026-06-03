@@ -80,6 +80,10 @@ app.get(
   }
 )
 
+app.get("/debug", (req, res) => {
+  res.send("DEBUG ROUTE")
+})
+
 app.delete(
   "/workspace/:id",
   async (req, res) => {
