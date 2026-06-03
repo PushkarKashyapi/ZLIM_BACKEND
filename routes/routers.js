@@ -1,15 +1,9 @@
 const express = require("express")
 
-const {
-  createWorkspace,
-  getWorkspaces,
-  deleteWorkspace
-} = require("../controller")
-
 const router = express.Router()
 
 router.post(
-  "/workspace",
+  "/",
   createWorkspace
 )
 
