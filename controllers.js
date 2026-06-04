@@ -109,6 +109,47 @@ app.delete(
   }
 )
 
+app.post(
+  "/routine",
+  async (req, res) => {
+    try {
+      const {
+        workspaceId,
+        time,
+        repeat
+      } = req.body
+
+      const workspace =
+        await Workspace.findByIdAndUpdate(
+          workspaceId,
+          {
+            routine: {
+              enabled: true,
+              time,
+              repeat
+            }
+          },
+          {
+            new: true
+          }
+        )
+
+      res.status(200).json({
+        success: true,
+        workspace
+      })
+    } catch (error) {
+      console.error(error)
+
+      res.status(500).json({
+        success: false,
+        message:
+          error.message
+      })
+    }
+  }
+)
+
 const PORT =
   process.env.PORT || 5000
 
