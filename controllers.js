@@ -28,7 +28,11 @@ app.post(
         name,
         trigger,
         autoLaunch,
-        tabs
+        tabs,
+
+        routineEnabled,
+        routineTime,
+        routineRepeat
       } = req.body
 
       const workspace =
@@ -36,7 +40,18 @@ app.post(
           name,
           trigger,
           autoLaunch,
-          tabs
+          tabs,
+
+          routine: {
+            enabled:
+              routineEnabled,
+
+            time:
+              routineTime,
+
+            repeat:
+              routineRepeat
+          }
         })
 
       res.status(201).json({
@@ -54,6 +69,7 @@ app.post(
     }
   }
 )
+
 
 app.get(
   "/workspace",
@@ -109,46 +125,6 @@ app.delete(
   }
 )
 
-app.post(
-  "/routine",
-  async (req, res) => {
-    try {
-      const {
-        workspaceId,
-        time,
-        repeat
-      } = req.body
-
-      const workspace =
-        await Workspace.findByIdAndUpdate(
-          workspaceId,
-          {
-            routine: {
-              enabled: true,
-              time,
-              repeat
-            }
-          },
-          {
-            new: true
-          }
-        )
-
-      res.status(200).json({
-        success: true,
-        workspace
-      })
-    } catch (error) {
-      console.error(error)
-
-      res.status(500).json({
-        success: false,
-        message:
-          error.message
-      })
-    }
-  }
-)
 
 const PORT =
   process.env.PORT || 5000
