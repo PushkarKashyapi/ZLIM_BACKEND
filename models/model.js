@@ -1,36 +1,36 @@
-const mongoose = require("mongoose")
-
 const workspaceSchema =
   new mongoose.Schema(
     {
-      name: {
-        type: String,
-        required: true
-      },
+      name: String,
 
-      trigger: {
-        type: String,
-        required: true
-      },
+      trigger: String,
 
-      autoLaunch: {
-        type: Boolean,
-        default: true
-      },
+      autoLaunch: Boolean,
 
-      tabs: [
-        {
+      tabs: [String],
+
+      routine: {
+        enabled: {
+          type: Boolean,
+          default: false
+        },
+
+        time: {
           type: String
+        },
+
+        repeat: {
+          type: String,
+          enum: [
+            "daily",
+            "weekdays",
+            "weekends",
+            "weekly"
+          ]
         }
-      ]
+      }
     },
     {
       timestamps: true
     }
-  )
-
-module.exports =
-  mongoose.model(
-    "Workspace",
-    workspaceSchema
   )
