@@ -36,3 +36,9 @@ const workspaceSchema =
       timestamps: true
     }
   )
+
+module.exports =
+  mongoose.model(
+    "Workspace",
+    workspaceSchema
+  )
