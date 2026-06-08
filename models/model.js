@@ -11,6 +11,13 @@ const workspaceSchema =
 
       tabs: [String],
 
+      // ADDED: Links this workspace directly to the logged-in user
+      userEmail: {
+        type: String,
+        required: true,
+        index: true // Makes searching by user email ultra-fast in MongoDB
+      },
+
       routine: {
         enabled: {
           type: Boolean,
