@@ -3,11 +3,8 @@ require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
 
-const connectDB =
-  require("./mongo")
-
-const Workspace =
-  require("./models/model")
+const connectDB = require("./mongo")
+const Workspace = require("./models/model")
 
 connectDB()
 
@@ -20,6 +17,7 @@ app.get("/", (req, res) => {
   res.send("Zlim Backend Running 🚀")
 })
 
+// 1. CREATE WORKSPACE (Now linked to userEmail)
 app.post(
   "/workspace",
   async (req, res) => {
@@ -29,11 +27,20 @@ app.post(
         trigger,
         autoLaunch,
         tabs,
+        userEmail, // <-- Destructure the user identity sent from Plasmo
 
         routineEnabled,
         routineTime,
         routineRepeat
       } = req.body
+
+      // Validation check to make sure an anonymous workspace isn't created
+      if (!userEmail) {
+        return res.status(400).json({
+          success: false,
+          message: "User email identity is required to create a workspace."
+        })
+      }
 
       const workspace =
         await Workspace.create({
@@ -41,16 +48,12 @@ app.post(
           trigger,
           autoLaunch,
           tabs,
+          userEmail, // <-- Save it directly into MongoDB
 
           routine: {
-            enabled:
-              routineEnabled,
-
-            time:
-              routineTime,
-
-            repeat:
-              routineRepeat
+            enabled: routineEnabled,
+            time: routineTime,
+            repeat: routineRepeat
           }
         })
 
@@ -60,23 +63,31 @@ app.post(
       })
     } catch (error) {
       console.error(error)
-
       res.status(500).json({
         success: false,
-        message:
-          error.message
+        message: error.message
       })
     }
   }
 )
 
-
+// 2. GET WORKSPACES (Now filtered by user query string)
 app.get(
   "/workspace",
   async (req, res) => {
     try {
+      const { user } = req.query // <-- Reads ?user=email from the request URL
+
+      if (!user) {
+        return res.status(400).json({
+          success: false,
+          message: "Missing 'user' query string parameter."
+        })
+      }
+
+      // Finds ONLY the workspaces belonging to this specific userEmail string
       const workspaces =
-        await Workspace.find().sort({
+        await Workspace.find({ userEmail: user }).sort({
           createdAt: -1
         })
 
@@ -86,11 +97,9 @@ app.get(
       })
     } catch (error) {
       console.error(error)
-
       res.status(500).json({
         success: false,
-        message:
-          error.message
+        message: error.message
       })
     }
   }
@@ -110,27 +119,20 @@ app.delete(
 
       res.status(200).json({
         success: true,
-        message:
-          "Workspace deleted"
+        message: "Workspace deleted"
       })
     } catch (error) {
       console.error(error)
-
       res.status(500).json({
         success: false,
-        message:
-          error.message
+        message: error.message
       })
     }
   }
 )
 
-
-const PORT =
-  process.env.PORT || 5000
+const PORT = process.env.PORT || 5000
 
 app.listen(PORT, () => {
-  console.log(
-    `Server running on port ${PORT}`
-  )
+  console.log(`Server running on port ${PORT}`)
 })
